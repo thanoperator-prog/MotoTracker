@@ -9,11 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MotoTracker">
     
-    <!-- Standalone Web App Manifest (Inline) -->
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22MotoTracker%22%2C%22short_name%22%3A%22MotoTracker%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f3f4f6%22%2C%22theme_color%22%3A%22%232563eb%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22icon.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%2C%7B%22src%22%3A%22icon.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
-    
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="./icon.png">
+    <link rel="apple-touch-icon" href="./icon.png">
     <title>MotoTracker - Motorcycle & Payment Monitor</title>
     <!-- Use Tailwind CSS for fast and responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,7 +43,7 @@
         <nav class="bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-none md:border-r border-gray-200 flex md:flex-col justify-around md:justify-start p-2 md:p-4 md:pt-8 absolute md:relative bottom-0 w-full md:w-64 z-20 md:h-full order-last md:order-first transition-all">
             <!-- Desktop Logo/Header -->
             <div class="hidden md:flex items-center gap-3 mb-8 text-blue-600 px-4">
-                <img src="icon.png" alt="App Icon" class="w-8 h-8 rounded-lg shadow-sm">
+                <img src="./icon.png" alt="App Icon" class="w-8 h-8 rounded-lg shadow-sm">
                 <span class="text-xl font-bold tracking-wide">MotoTracker</span>
             </div>
 
@@ -74,7 +71,7 @@
             <!-- Mobile Header -->
             <header class="md:hidden bg-blue-600 text-white p-4 shadow-md z-10 flex justify-between items-center">
                 <h1 class="text-xl font-bold tracking-wide" id="header-title-mobile">Dashboard</h1>
-                <img src="icon.png" alt="App Icon" class="w-7 h-7 rounded shadow-sm border border-white">
+                <img src="./icon.png" alt="App Icon" class="w-7 h-7 rounded shadow-sm border border-white">
             </header>
 
             <!-- Desktop Header -->
@@ -460,48 +457,34 @@
 
     <!-- Application Logic -->
     <script>
-        // --- PWA SERVICE WORKER (Inline to keep as single file) ---
+        // --- FIX DEPLOYMENT CACHE & MANIFEST ---
+        // 1. Unregister old Service Workers to fix "not reflecting" (cache issue)
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swContent = `
-                    const CACHE_NAME = 'mototracker-v2';
-                    const urlsToCache = [
-                        './',
-                        'https://cdn.tailwindcss.com',
-                        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-                        'icon.png'
-                    ];
-
-                    self.addEventListener('install', event => {
-                        event.waitUntil(
-                            caches.open(CACHE_NAME)
-                                .then(cache => cache.addAll(urlsToCache))
-                        );
-                    });
-
-                    self.addEventListener('fetch', event => {
-                        event.respondWith(
-                            caches.match(event.request)
-                                .then(response => {
-                                    if (response) {
-                                        return response;
-                                    }
-                                    return fetch(event.request);
-                                })
-                        );
-                    });
-                `;
-                // Create a Blob to dynamically run the Service Worker
-                const blob = new Blob([swContent], { type: 'application/javascript' });
-                const swUrl = URL.createObjectURL(blob);
-                
-                navigator.serviceWorker.register(swUrl).then(registration => {
-                    console.log('PWA ServiceWorker registered successfully.');
-                }).catch(err => {
-                    console.log('PWA ServiceWorker registration failed: ', err);
-                });
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                }
             });
         }
+
+        // 2. Dynamically build the manifest so "icon.png" finds the correct server path
+        const basePath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+        const manifest = {
+            "name": "MotoTracker",
+            "short_name": "MotoTracker",
+            "start_url": basePath,
+            "display": "standalone",
+            "background_color": "#f3f4f6",
+            "theme_color": "#2563eb",
+            "icons": [
+                { "src": basePath + "icon.png", "sizes": "192x192", "type": "image/png" },
+                { "src": basePath + "icon.png", "sizes": "512x512", "type": "image/png" }
+            ]
+        };
+        const manifestLink = document.createElement('link');
+        manifestLink.rel = 'manifest';
+        manifestLink.href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+        document.head.appendChild(manifestLink);
 
         // Default data structures
         const defaultData = {
