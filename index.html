@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- PWA Meta Tags at Icon -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MotoTracker">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'><path fill='%232563eb' d='M280 32C280 14.3 294.3 0 312 0l72 0c53 0 96 43 96 96c0 47.2-34.1 86.6-79.1 94.6l-21.7 54.2c27.1 23.3 46 56.4 50.9 94.1c42.8-5.5 83.1-23.7 114.9-52.6L600 256l0-16c0-17.7 14.3-32 32-32s32 14.3 32 32l0 16c0 8.8-7.2 16-16 16l-16 0-38.6 38.6c18 25.1 28.6 55.6 28.6 88.4c0 83.9-68.1 152-152 152s-152-68.1-152-152c0-29.5 8.5-57 23.1-79.7l-35.8-89.4C292 233.1 280 249.2 280 267.6l0 20.4c0 17.7-14.3 32-32 32l-24 0c-17.7 0-32-14.3-32-32l0-42.5c0-38.3 23-72.6 57.8-86.5l14.9-5.9c15.2-6.1 22.6-23.3 16.5-38.5s-23.3-22.6-38.5-16.5L200.5 141.2C170.6 153.1 150 182.5 150 215.4l0 9.2c-5.8 2.1-11.3 4.6-16.5 7.6L125 212.8c-7-10.5-20.9-14-32.3-8.2L12.5 244.8C5 248.5 0 256.1 0 264.6c0 13 10.5 23.4 23.4 23.4l11.4 0L17.5 311.1c-11.1 19.3-17.5 41.7-17.5 65.5C0 460.5 68.1 528.6 152 528.6s152-68.1 152-152c0-23.8-6.4-46.2-17.5-65.5l30.4-53.1 13.9-34.8c11.3-11.3 23.8-21.2 37.3-29.6l23.5-58.8c3.2-8.1 6.8-15.9 10.7-23.4l-11.2-4.5c-4.4-1.8-9.4 .4-11.2 4.8l-15.5 38.7c-2 5-7.7 7.4-12.7 5.4s-7.4-7.7-5.4-12.7L280 32zM152 464.6c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88zm352 0c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88z'/></svg>">
+    <title>MotoTracker - Motorcycle & Payment Monitor</title>
+    <!-- Use Tailwind CSS for fast and responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Prevent text selection on buttons like native apps */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        /* Hide scrollbar for a cleaner look but keep it scrollable */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen w-screen overflow-hidden flex no-select font-sans">
+
+    <!-- Responsive App Container: Row on Desktop, Column on Mobile -->
+    <div class="w-full h-full flex flex-col md:flex-row relative overflow-hidden">
+        
+        <!-- Navigation (Bottom on Mobile, Sidebar on Desktop) -->
+        <nav class="bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-none md:border-r border-gray-200 flex md:flex-col justify-around md:justify-start p-2 md:p-4 md:pt-8 absolute md:relative bottom-0 w-full md:w-64 z-20 md:h-full order-last md:order-first transition-all">
+            <!-- Desktop Logo/Header -->
+            <div class="hidden md:flex items-center gap-3 mb-8 text-blue-600 px-4">
+                <i class="fa-solid fa-motorcycle text-3xl"></i>
+                <span class="text-xl font-bold tracking-wide">MotoTracker</span>
+            </div>
+
+            <button onclick="switchTab('dashboard', this)" class="nav-btn active-nav flex flex-col md:flex-row items-center p-2 md:px-4 md:py-3 w-1/4 md:w-full rounded-lg transition-colors text-blue-600 md:bg-blue-50 md:mb-2">
+                <i class="fa-solid fa-house text-xl md:text-lg mb-1 md:mb-0 md:mr-3 md:w-6 text-center"></i>
+                <span class="text-[10px] md:text-sm font-semibold">Dashboard</span>
+            </button>
+            <button onclick="switchTab('info', this)" class="nav-btn flex flex-col md:flex-row items-center p-2 md:px-4 md:py-3 w-1/4 md:w-full rounded-lg transition-colors text-gray-500 hover:text-blue-600 md:hover:bg-blue-50 md:mb-2">
+                <i class="fa-solid fa-file-lines text-xl md:text-lg mb-1 md:mb-0 md:mr-3 md:w-6 text-center"></i>
+                <span class="text-[10px] md:text-sm font-semibold">Bike Info</span>
+            </button>
+            <button onclick="switchTab('pms', this)" class="nav-btn flex flex-col md:flex-row items-center p-2 md:px-4 md:py-3 w-1/4 md:w-full rounded-lg transition-colors text-gray-500 hover:text-blue-600 md:hover:bg-blue-50 md:mb-2">
+                <i class="fa-solid fa-wrench text-xl md:text-lg mb-1 md:mb-0 md:mr-3 md:w-6 text-center"></i>
+                <span class="text-[10px] md:text-sm font-semibold">PMS</span>
+            </button>
+            <button onclick="switchTab('payments', this)" class="nav-btn flex flex-col md:flex-row items-center p-2 md:px-4 md:py-3 w-1/4 md:w-full rounded-lg transition-colors text-gray-500 hover:text-blue-600 md:hover:bg-blue-50 md:mb-2">
+                <i class="fa-solid fa-wallet text-xl md:text-lg mb-1 md:mb-0 md:mr-3 md:w-6 text-center"></i>
+                <span class="text-[10px] md:text-sm font-semibold">Payments</span>
+            </button>
+        </nav>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 flex flex-col h-full relative bg-gray-50 w-full">
+            
+            <!-- Mobile Header -->
+            <header class="md:hidden bg-blue-600 text-white p-4 shadow-md z-10 flex justify-between items-center">
+                <h1 class="text-xl font-bold tracking-wide" id="header-title-mobile">Dashboard</h1>
+                <i class="fa-solid fa-motorcycle text-2xl"></i>
+            </header>
+
+            <!-- Desktop Header -->
+            <div class="hidden md:flex bg-white border-b px-8 py-5 shadow-sm z-10 items-center justify-between">
+                <h1 class="text-2xl font-bold text-gray-800" id="header-title-desktop">Dashboard</h1>
+                <div class="text-sm text-gray-500 bg-gray-100 px-3 py-1.5 rounded-full"><i class="fa-solid fa-circle-check text-green-500 mr-1"></i> Data Saved Locally</div>
+            </div>
+
+            <!-- Scrollable Content -->
+            <main class="flex-1 overflow-y-auto hide-scrollbar p-4 md:p-8 pb-20 md:pb-8 w-full" id="main-content">
+                
+                <div class="max-w-6xl mx-auto w-full">
+                    
+                    <!-- VIEW: DASHBOARD -->
+                    <div id="view-dashboard" class="view-section">
+                        
+                        <!-- PMS Alerts Container (Lalabas lang kung may Overdue o Due Soon) -->
+                        <div id="dash-pms-alerts" class="mb-4 md:mb-6 flex flex-col gap-3 empty:hidden"></div>
+
+                        <!-- Top Stats Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-4 md:mb-6">
+                            <div class="bg-white rounded-xl shadow p-5 border-l-4 border-blue-500 h-full flex flex-col justify-center">
+                                <h2 class="text-gray-500 text-sm font-semibold uppercase mb-1">My Motorcycle</h2>
+                                <p class="text-2xl font-bold text-gray-800 truncate" id="dash-bike-name">Not Set</p>
+                                <p class="text-sm text-gray-600 mt-1" id="dash-plate-no">Plate: Not Set</p>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow p-5 border-t-4 border-red-500 h-full flex flex-col justify-center transition-all duration-300" id="dash-payment-card">
+                                <h2 class="text-gray-500 text-xs font-semibold uppercase mb-1">Next Payment</h2>
+                                <p class="text-2xl font-bold text-red-600" id="dash-next-payment">₱ 0.00</p>
+                                <p class="text-sm text-gray-500 mt-1 font-medium bg-red-50 inline-block px-2 py-0.5 rounded w-max" id="dash-due-date">Due: Not Set</p>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow p-5 border-t-4 border-green-500 h-full flex flex-col justify-center">
+                                <h2 class="text-gray-500 text-xs font-semibold uppercase mb-1">Total Paid</h2>
+                                <p class="text-2xl font-bold text-green-600" id="dash-total-paid">₱ 0.00</p>
+                                <p class="text-sm text-gray-500 mt-1 font-medium bg-green-50 inline-block px-2 py-0.5 rounded w-max" id="dash-progress">0% Completed</p>
+                            </div>
+                        </div>
+
+                        <!-- Odometer and Loan Progress -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
+                            
+                            <!-- Odometer Quick Update -->
+                            <div class="bg-white rounded-xl shadow p-5 lg:p-6 flex flex-col justify-center">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-lg text-gray-800 font-bold"><i class="fa-solid fa-gauge-high text-blue-600 mr-2"></i> Current Odometer</h2>
+                                </div>
+                                <div class="flex gap-3 items-center">
+                                    <input type="number" id="dash-current-odo" class="w-full p-3 border-2 border-gray-200 rounded-lg bg-gray-50 font-bold text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="0">
+                                    <span class="text-gray-500 font-bold">km</span>
+                                    <button onclick="saveOdo()" class="bg-blue-600 text-white px-5 py-3 rounded-lg font-bold hover:bg-blue-700 shadow-md transition">Update</button>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-3 text-center">Update this regularly to track PMS schedules accurately.</p>
+                            </div>
+
+                            <!-- Loan Progress -->
+                            <div class="bg-white rounded-xl shadow p-5 lg:p-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h2 class="text-lg text-gray-800 font-bold">Loan Progress</h2>
+                                    <span class="text-sm font-bold text-blue-600 bg-blue-100 px-3 py-1 rounded-full" id="dash-months-paid">0 / 0 Months</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                                    <div class="bg-blue-600 h-4 rounded-full transition-all duration-500" id="dash-progress-bar" style="width: 0%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 text-right">Keep up the good work!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VIEW: BIKE INFO & DOCS -->
+                    <div id="view-info" class="view-section hidden">
+                        <div class="bg-white rounded-xl shadow p-5 md:p-8 max-w-4xl">
+                            <h2 class="text-xl font-bold text-gray-800 mb-5 border-b pb-3 flex items-center"><i class="fa-solid fa-motorcycle mr-2 text-blue-600"></i> Motorcycle Details</h2>
+                            <form id="form-bike-info" class="space-y-4 md:space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Make & Model</label>
+                                        <input type="text" id="info-model" class="w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g. Honda Click 125i">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Year</label>
+                                        <input type="text" id="info-year" class="w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="2024">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Color</label>
+                                        <input type="text" id="info-color" class="w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Matte Black">
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-bold text-gray-800 mt-8 mb-5 border-b pb-3 flex items-center"><i class="fa-solid fa-file-contract mr-2 text-blue-600"></i> Documents & Registration</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 p-4 bg-gray-50 border rounded-lg">
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">OR Number (Official Receipt)</label>
+                                            <input type="text" id="info-or" class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g. 123456789">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">CR Number (Cert. of Reg.)</label>
+                                            <input type="text" id="info-cr" class="w-full p-2.5 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g. 987654321">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Plate Number / MV File No.</label>
+                                        <input type="text" id="info-plate" class="w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="ABC 123">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Registration Expiry (LTO)</label>
+                                        <input type="date" id="info-lto-expiry" class="w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Engine Number</label>
+                                        <input type="text" id="info-engine" class="w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Chassis Number</label>
+                                        <input type="text" id="info-chassis" class="w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">Date of Purchase</label>
+                                        <input type="date" id="info-purchase-date" class="w-full p-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                        <p class="text-[10px] text-gray-500 mt-1">*Used to calculate exact payment due dates</p>
+                                    </div>
+                                </div>
+
+                                <div class="pt-4">
+                                    <button type="button" onclick="saveBikeInfo()" class="w-full md:w-auto md:px-10 bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition shadow-md">
+                                        <i class="fa-solid fa-floppy-disk mr-2"></i> Save Information
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- VIEW: PMS TRACKER -->
+                    <div id="view-pms" class="view-section hidden max-w-4xl">
+                        
+                        <!-- Maintenance Status Board -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-3">
+                                <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-clipboard-check text-blue-600 mr-2"></i> Standard Maintenance Status</h2>
+                                <button onclick="openModal('modal-pms-intervals')" class="text-gray-500 hover:text-blue-600 text-sm font-semibold transition bg-gray-100 px-3 py-1 rounded-full border border-gray-200 shadow-sm">
+                                    <i class="fa-solid fa-gear mr-1"></i> Edit Intervals
+                                </button>
+                            </div>
+                            <div id="pms-status-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <!-- Status generated by JS based on Odometer -->
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-xl shadow-sm border">
+                            <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-clock-rotate-left text-blue-600 mr-2"></i> History</h2>
+                            <button onclick="openModal('modal-pms')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-blue-700 transition">
+                                <i class="fa-solid fa-plus mr-1"></i> Add Record
+                            </button>
+                        </div>
+
+                        <div id="pms-list" class="space-y-4">
+                            <!-- PMS records will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- VIEW: PAYMENTS -->
+                    <div id="view-payments" class="view-section hidden max-w-4xl">
+                        
+                        <!-- Loan Settings Card -->
+                        <div class="bg-gray-800 text-white rounded-xl shadow-lg p-5 md:p-6 mb-6 relative overflow-hidden">
+                            <!-- Background decoration -->
+                            <i class="fa-solid fa-wallet absolute -right-4 -bottom-4 text-8xl text-gray-700 opacity-50"></i>
+                            
+                            <div class="flex justify-between items-center mb-4 border-b border-gray-600 pb-3 relative z-10">
+                                <h2 class="text-lg font-bold"><i class="fa-solid fa-file-invoice-dollar mr-2"></i> Loan Details</h2>
+                                <button onclick="openModal('modal-loan-settings')" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded text-sm transition font-semibold">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit Settings
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm relative z-10">
+                                <div class="bg-gray-900 bg-opacity-50 p-3 rounded-lg">
+                                    <div class="text-gray-400 mb-1">Monthly Amortization</div>
+                                    <div class="font-bold text-xl text-green-400" id="pay-monthly">₱ 0.00</div>
+                                </div>
+                                <div class="bg-gray-900 bg-opacity-50 p-3 rounded-lg">
+                                    <div class="text-gray-400 mb-1">Terms (Months)</div>
+                                    <div class="font-bold text-xl" id="pay-terms">0</div>
+                                </div>
+                                <div class="bg-gray-900 bg-opacity-50 p-3 rounded-lg">
+                                    <div class="text-gray-400 mb-1">Due Date</div>
+                                    <div class="font-bold text-xl text-yellow-400" id="pay-due">Day 1</div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-400 relative z-10 mt-3">* Exact due dates are automatically calculated based on your Date of Purchase.</p>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-xl shadow-sm border">
+                            <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-clock-rotate-left text-blue-600 mr-2"></i> Payment History</h2>
+                            <button onclick="openModal('modal-add-payment')" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-green-700 transition">
+                                <i class="fa-solid fa-plus mr-1"></i> Add Payment
+                            </button>
+                        </div>
+
+                        <div id="payment-list" class="space-y-4">
+                            <!-- Payment records will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+        <!-- MODALS (Hidden by default) -->
+        
+        <!-- Modal: Add PMS -->
+        <div id="modal-pms" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto pt-20 pb-20">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all my-auto">
+                <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
+                    <h3 class="font-bold text-lg">Add Maintenance Record</h3>
+                    <button onclick="closeModal('modal-pms')" class="hover:text-gray-200 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Date</label>
+                            <input type="date" id="pms-date" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Odometer (km)</label>
+                            <input type="number" id="pms-odo" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="e.g. 1500">
+                        </div>
+                    </div>
+
+                    <!-- PMS Checkboxes -->
+                    <div class="bg-gray-50 p-3 rounded border">
+                        <label class="block text-xs font-bold text-gray-600 mb-2 uppercase tracking-wide">Parts Replaced / Serviced</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="Engine Oil" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> Engine Oil</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="Gear Oil" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> Gear Oil</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="Air Filter" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> Air Filter</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="Spark Plug" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> Spark Plug</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="CVT Cleaning" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> CVT Cleaning</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="V-Belt" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> V-Belt</label>
+                            <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="Coolant" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> Coolant</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Other Notes / Service Done</label>
+                        <textarea id="pms-service" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" rows="2" placeholder="Tune up, change tire, etc..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Total Cost (₱)</label>
+                        <input type="number" id="pms-cost" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="0.00">
+                    </div>
+                    <button onclick="addPMSRecord()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg mt-2 hover:bg-blue-700 transition">Save Record</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Loan Settings -->
+        <div id="modal-loan-settings" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+                <div class="bg-gray-800 p-4 text-white flex justify-between items-center">
+                    <h3 class="font-bold text-lg">Set Loan Details</h3>
+                    <button onclick="closeModal('modal-loan-settings')" class="hover:text-gray-300 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Monthly Amortization (₱)</label>
+                        <input type="number" id="set-monthly" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-gray-800 focus:outline-none" placeholder="e.g. 3500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Total Terms</label>
+                            <input type="number" id="set-terms" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-gray-800 focus:outline-none" placeholder="Months">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">Due Date</label>
+                            <input type="number" id="set-due" min="1" max="31" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-gray-800 focus:outline-none" placeholder="Day (1-31)">
+                        </div>
+                    </div>
+                    <button onclick="saveLoanSettings()" class="w-full bg-gray-800 text-white font-bold py-3 rounded-lg mt-2 hover:bg-gray-900 transition">Save Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Add Payment -->
+        <div id="modal-add-payment" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+                <div class="bg-green-600 p-4 text-white flex justify-between items-center">
+                    <h3 class="font-bold text-lg">Record Payment</h3>
+                    <button onclick="closeModal('modal-add-payment')" class="hover:text-green-200 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Payment Date</label>
+                        <input type="date" id="pay-add-date" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Amount Paid (₱)</label>
+                        <input type="number" id="pay-add-amount" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Receipt / Ref Number (Optional)</label>
+                        <input type="text" id="pay-add-ref" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="OR# or Gcash Ref...">
+                    </div>
+                    <button onclick="addPaymentRecord()" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg mt-2 hover:bg-green-700 transition">Save Payment</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Edit PMS Intervals -->
+        <div id="modal-pms-intervals" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto pt-20 pb-20">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all my-auto">
+                <div class="bg-gray-800 p-4 text-white flex justify-between items-center">
+                    <h3 class="font-bold text-lg">Edit Maintenance Intervals (km)</h3>
+                    <button onclick="closeModal('modal-pms-intervals')" class="hover:text-gray-200 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Engine Oil (km)</label>
+                            <input type="number" id="int-engine-oil" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Gear Oil (km)</label>
+                            <input type="number" id="int-gear-oil" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Spark Plug (km)</label>
+                            <input type="number" id="int-spark-plug" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">CVT Cleaning (km)</label>
+                            <input type="number" id="int-cvt-cleaning" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Air Filter (km)</label>
+                            <input type="number" id="int-air-filter" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">V-Belt (km)</label>
+                            <input type="number" id="int-v-belt" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Coolant (km)</label>
+                            <input type="number" id="int-coolant" class="w-full p-2.5 border border-gray-300 rounded bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <button onclick="savePMSIntervals()" class="w-full bg-gray-800 text-white font-bold py-3 rounded-lg mt-2 hover:bg-gray-900 transition">Save Intervals</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Confirm Delete -->
+        <div id="modal-confirm-delete" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all">
+                <div class="bg-red-600 p-4 text-white flex justify-between items-center">
+                    <h3 class="font-bold text-lg"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Confirm Delete</h3>
+                    <button onclick="closeModal('modal-confirm-delete')" class="hover:text-gray-200 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 text-center">
+                    <p class="text-gray-700 font-medium mb-6">Are you sure you want to delete this record? This action cannot be undone.</p>
+                    <div class="flex gap-3">
+                        <button onclick="closeModal('modal-confirm-delete')" class="flex-1 bg-gray-200 text-gray-800 font-bold py-2.5 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+                        <button onclick="executeDelete()" class="flex-1 bg-red-600 text-white font-bold py-2.5 rounded-lg hover:bg-red-700 transition shadow-md">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Toast -->
+        <div id="toast" class="absolute top-5 right-5 md:top-10 md:right-10 bg-gray-800 text-white px-5 py-3 rounded-lg shadow-xl text-sm font-semibold transition-opacity duration-300 opacity-0 pointer-events-none z-50 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-blue-400"></i>
+            <span id="toast-message">Notification message here</span>
+        </div>
+
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // Default data structures
+        const defaultData = {
+            bikeInfo: { model: "", year: "", color: "", plate: "", engine: "", chassis: "", purchaseDate: "", ltoExpiry: "", orNo: "", crNo: "" },
+            loanInfo: { monthly: 0, terms: 0, dueDate: 1 },
+            payments: [], // { id, date, amount, ref }
+            pms: [], // { id, date, odo, parts: [], service, cost }
+            currentOdo: 0,
+            pmsIntervals: { // Editable default intervals
+                'Engine Oil': 4000,
+                'Gear Oil': 12000,
+                'Spark Plug': 8000,
+                'CVT Cleaning': 8000,
+                'Air Filter': 16000,
+                'V-Belt': 25000,
+                'Coolant': 12000
+            }
+        };
+
+        // Load data from localStorage or use default
+        let appData = JSON.parse(localStorage.getItem('motoTrackerData')) || defaultData;
+        
+        // Data Migration helper for older versions missing parts array, currentOdo, or intervals
+        if(appData.currentOdo === undefined) appData.currentOdo = 0;
+        if(appData.bikeInfo.orNo === undefined) {
+            appData.bikeInfo.orNo = "";
+            appData.bikeInfo.crNo = "";
+        }
+        if(!appData.pmsIntervals) {
+            appData.pmsIntervals = defaultData.pmsIntervals;
+        }
+
+        // Utility to save data to storage
+        function saveData() {
+            localStorage.setItem('motoTrackerData', JSON.stringify(appData));
+        }
+
+        // Utility for currency formatting (PHP)
+        function formatMoney(amount) {
+            return "₱ " + parseFloat(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // --- NAVIGATION LOGIC ---
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+            const titles = { 'dashboard': 'Dashboard', 'info': 'Bike Info & Docs', 'pms': 'PMS Tracker', 'payments': 'Payment Tracker' };
+            document.getElementById('header-title-mobile').innerText = titles[tabId];
+            document.getElementById('header-title-desktop').innerText = titles[tabId];
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-blue-600', 'md:bg-blue-50');
+                btn.classList.add('text-gray-500');
+            });
+            btnElement.classList.remove('text-gray-500');
+            btnElement.classList.add('text-blue-600', 'md:bg-blue-50');
+
+            updateUI();
+        }
+
+        // --- MODAL LOGIC ---
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            
+            const today = new Date().toISOString().split('T')[0];
+            if(modalId === 'modal-pms') {
+                document.getElementById('pms-date').value = today;
+                document.getElementById('pms-odo').value = appData.currentOdo || '';
+                // Uncheck all boxes
+                document.querySelectorAll('.pms-checkbox').forEach(cb => cb.checked = false);
+            }
+            if(modalId === 'modal-add-payment') {
+                document.getElementById('pay-add-date').value = today;
+                document.getElementById('pay-add-amount').value = appData.loanInfo.monthly || '';
+            }
+            if(modalId === 'modal-loan-settings') {
+                document.getElementById('set-monthly').value = appData.loanInfo.monthly || '';
+                document.getElementById('set-terms').value = appData.loanInfo.terms || '';
+                document.getElementById('set-due').value = appData.loanInfo.dueDate || '';
+            }
+            if(modalId === 'modal-pms-intervals') {
+                document.getElementById('int-engine-oil').value = appData.pmsIntervals['Engine Oil'];
+                document.getElementById('int-gear-oil').value = appData.pmsIntervals['Gear Oil'];
+                document.getElementById('int-spark-plug').value = appData.pmsIntervals['Spark Plug'];
+                document.getElementById('int-cvt-cleaning').value = appData.pmsIntervals['CVT Cleaning'];
+                document.getElementById('int-air-filter').value = appData.pmsIntervals['Air Filter'];
+                document.getElementById('int-v-belt').value = appData.pmsIntervals['V-Belt'];
+                document.getElementById('int-coolant').value = appData.pmsIntervals['Coolant'];
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 3000);
+        }
+
+        // --- DATA HANDLING LOGIC ---
+
+        function saveOdo() {
+            const odoVal = document.getElementById('dash-current-odo').value;
+            appData.currentOdo = parseInt(odoVal) || 0;
+            saveData();
+            showToast("Odometer Updated!");
+            updateUI();
+        }
+
+        function saveBikeInfo() {
+            appData.bikeInfo = {
+                model: document.getElementById('info-model').value,
+                year: document.getElementById('info-year').value,
+                color: document.getElementById('info-color').value,
+                plate: document.getElementById('info-plate').value,
+                engine: document.getElementById('info-engine').value,
+                chassis: document.getElementById('info-chassis').value,
+                purchaseDate: document.getElementById('info-purchase-date').value,
+                ltoExpiry: document.getElementById('info-lto-expiry').value,
+                orNo: document.getElementById('info-or').value,
+                crNo: document.getElementById('info-cr').value
+            };
+            saveData();
+            showToast("Bike Information Saved!");
+            updateUI();
+        }
+
+        function saveLoanSettings() {
+            appData.loanInfo = {
+                monthly: parseFloat(document.getElementById('set-monthly').value) || 0,
+                terms: parseInt(document.getElementById('set-terms').value) || 0,
+                dueDate: parseInt(document.getElementById('set-due').value) || 1
+            };
+            saveData();
+            closeModal('modal-loan-settings');
+            showToast("Loan Settings Updated!");
+            updateUI();
+        }
+
+        function addPaymentRecord() {
+            const date = document.getElementById('pay-add-date').value;
+            const amount = parseFloat(document.getElementById('pay-add-amount').value) || 0;
+            const ref = document.getElementById('pay-add-ref').value;
+
+            if(!date || amount <= 0) {
+                showToast("Error: Please enter a valid date and amount.");
+                return;
+            }
+
+            appData.payments.push({ id: Date.now(), date: date, amount: amount, ref: ref });
+            appData.payments.sort((a, b) => new Date(b.date) - new Date(a.date));
+            saveData();
+            closeModal('modal-add-payment');
+            
+            document.getElementById('pay-add-amount').value = '';
+            document.getElementById('pay-add-ref').value = '';
+            
+            showToast("Payment Recorded!");
+            updateUI();
+        }
+
+        function addPMSRecord() {
+            const date = document.getElementById('pms-date').value;
+            const odo = parseInt(document.getElementById('pms-odo').value) || 0;
+            const service = document.getElementById('pms-service').value;
+            const cost = parseFloat(document.getElementById('pms-cost').value) || 0;
+            
+            // Gather checked parts
+            const partsReplaced = [];
+            document.querySelectorAll('.pms-checkbox:checked').forEach(cb => {
+                partsReplaced.push(cb.value);
+            });
+
+            if(!date || (partsReplaced.length === 0 && !service)) {
+                showToast("Error: Please enter a date and select at least one part or service.");
+                return;
+            }
+
+            appData.pms.push({
+                id: Date.now(),
+                date: date,
+                odo: odo,
+                parts: partsReplaced,
+                service: service || (partsReplaced.length > 0 ? "Standard Replacements" : ""),
+                cost: cost
+            });
+
+            // Auto-update global odo if the PMS odo is higher
+            if(odo > appData.currentOdo) {
+                appData.currentOdo = odo;
+            }
+
+            appData.pms.sort((a, b) => new Date(b.date) - new Date(a.date));
+            saveData();
+            closeModal('modal-pms');
+
+            document.getElementById('pms-odo').value = '';
+            document.getElementById('pms-service').value = '';
+            document.getElementById('pms-cost').value = '';
+
+            showToast("PMS Record Added!");
+            updateUI();
+        }
+
+        function savePMSIntervals() {
+            appData.pmsIntervals['Engine Oil'] = parseInt(document.getElementById('int-engine-oil').value) || 4000;
+            appData.pmsIntervals['Gear Oil'] = parseInt(document.getElementById('int-gear-oil').value) || 12000;
+            appData.pmsIntervals['Spark Plug'] = parseInt(document.getElementById('int-spark-plug').value) || 8000;
+            appData.pmsIntervals['CVT Cleaning'] = parseInt(document.getElementById('int-cvt-cleaning').value) || 8000;
+            appData.pmsIntervals['Air Filter'] = parseInt(document.getElementById('int-air-filter').value) || 16000;
+            appData.pmsIntervals['V-Belt'] = parseInt(document.getElementById('int-v-belt').value) || 25000;
+            appData.pmsIntervals['Coolant'] = parseInt(document.getElementById('int-coolant').value) || 12000;
+            
+            saveData();
+            closeModal('modal-pms-intervals');
+            showToast("PMS Intervals Updated!");
+            updateUI();
+        }
+
+        let recordToDelete = null;
+
+        function deleteRecord(type, id) {
+            recordToDelete = { type, id };
+            openModal('modal-confirm-delete');
+        }
+
+        function executeDelete() {
+            if(recordToDelete) {
+                const { type, id } = recordToDelete;
+                const targetId = String(id);
+                
+                if(type === 'payment') {
+                    appData.payments = appData.payments.filter(p => String(p.id) !== targetId);
+                } else if (type === 'pms') {
+                    appData.pms = appData.pms.filter(p => String(p.id) !== targetId);
+                }
+                
+                saveData();
+                updateUI();
+                showToast("Record Deleted successfully.");
+                closeModal('modal-confirm-delete');
+                recordToDelete = null;
+            }
+        }
+
+        // --- UI UPDATING LOGIC ---
+
+        function updateUI() {
+            populateBikeInfoForm();
+            updateDashboard();
+            renderPayments();
+            renderPMSStatus();
+            renderPMS();
+        }
+
+        function populateBikeInfoForm() {
+            document.getElementById('info-model').value = appData.bikeInfo.model || "";
+            document.getElementById('info-year').value = appData.bikeInfo.year || "";
+            document.getElementById('info-color').value = appData.bikeInfo.color || "";
+            document.getElementById('info-plate').value = appData.bikeInfo.plate || "";
+            document.getElementById('info-engine').value = appData.bikeInfo.engine || "";
+            document.getElementById('info-chassis').value = appData.bikeInfo.chassis || "";
+            document.getElementById('info-purchase-date').value = appData.bikeInfo.purchaseDate || "";
+            document.getElementById('info-lto-expiry').value = appData.bikeInfo.ltoExpiry || "";
+            document.getElementById('info-or').value = appData.bikeInfo.orNo || "";
+            document.getElementById('info-cr').value = appData.bikeInfo.crNo || "";
+            
+            document.getElementById('dash-current-odo').value = appData.currentOdo || "";
+        }
+
+        function updateDashboard() {
+            document.getElementById('dash-bike-name').innerText = appData.bikeInfo.model || "Motorcycle Not Set";
+            document.getElementById('dash-plate-no').innerText = appData.bikeInfo.plate ? `Plate: ${appData.bikeInfo.plate}` : "Plate: Not Set";
+
+            // Payment & Loan Computations
+            const totalPaid = appData.payments.reduce((sum, p) => sum + p.amount, 0);
+            const monthsPaid = appData.payments.length; 
+            const totalTerms = appData.loanInfo.terms || 0;
+            const progressPercent = totalTerms > 0 ? Math.min(100, (monthsPaid / totalTerms) * 100).toFixed(0) : 0;
+
+            document.getElementById('dash-total-paid').innerText = formatMoney(totalPaid);
+            document.getElementById('dash-progress').innerText = `${progressPercent}% Completed`;
+            document.getElementById('dash-months-paid').innerText = `${monthsPaid} / ${totalTerms} Months`;
+            document.getElementById('dash-progress-bar').style.width = `${progressPercent}%`;
+
+            // Calculate exact NEXT PAYMENT based on purchase date
+            let nextPaymentAmountText = formatMoney(appData.loanInfo.monthly);
+            let nextDueDateText = "Due: Not Set";
+            let isOverdue = false;
+
+            if (appData.bikeInfo.purchaseDate && totalTerms > 0) {
+                if (monthsPaid >= totalTerms) {
+                    nextPaymentAmountText = "PAID IN FULL";
+                    nextDueDateText = "Loan Completed";
+                } else {
+                    let pDate = new Date(appData.bikeInfo.purchaseDate);
+                    let dueDay = appData.loanInfo.dueDate || pDate.getDate(); // fallback to purchase day if none
+                    
+                    // Add monthsPaid + 1 to calculate the next month due.
+                    let nextDue = new Date(pDate.getFullYear(), pDate.getMonth() + monthsPaid + 1, dueDay);
+                    
+                    let today = new Date();
+                    today.setHours(0,0,0,0);
+                    
+                    isOverdue = today > nextDue;
+                    
+                    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                    nextDueDateText = (isOverdue ? "OVERDUE: " : "Due: ") + nextDue.toLocaleDateString('en-US', options);
+                }
+            } else if (!appData.bikeInfo.purchaseDate) {
+                nextDueDateText = "Please set Purchase Date";
+            }
+
+            document.getElementById('dash-next-payment').innerText = nextPaymentAmountText;
+            
+            const dueDateEl = document.getElementById('dash-due-date');
+            dueDateEl.innerText = nextDueDateText;
+            const dashCardEl = document.getElementById('dash-payment-card');
+
+            if (isOverdue) {
+                dueDateEl.className = "text-xs font-bold bg-red-600 text-white inline-block px-3 py-1 rounded shadow-md mt-1 animate-pulse";
+                dashCardEl.classList.add('border-red-600', 'bg-red-50');
+                dashCardEl.classList.remove('border-red-500', 'bg-white');
+            } else {
+                dueDateEl.className = "text-sm text-gray-500 mt-1 font-medium bg-red-50 inline-block px-2 py-0.5 rounded w-max";
+                dashCardEl.classList.remove('border-red-600', 'bg-red-50');
+                dashCardEl.classList.add('border-red-500', 'bg-white');
+            }
+
+            // --- Dashboard PMS Alerts Logic ---
+            const alertsContainer = document.getElementById('dash-pms-alerts');
+            alertsContainer.innerHTML = '';
+            let currentOdo = parseInt(appData.currentOdo) || 0;
+
+            Object.keys(appData.pmsIntervals).forEach(part => {
+                let interval = appData.pmsIntervals[part];
+                let latestRecord = appData.pms.find(r => r.parts && r.parts.includes(part));
+                let lastOdo = latestRecord ? parseInt(latestRecord.odo) : 0;
+                let nextDueOdo = lastOdo + interval;
+                
+                if (lastOdo === 0) nextDueOdo = interval; // Assume first interval if no record
+
+                let remaining = nextDueOdo - currentOdo;
+
+                if (remaining <= 0 && lastOdo !== 0) {
+                    // Alert if OVERDUE
+                    alertsContainer.innerHTML += `
+                        <div class="bg-red-100 border-l-4 border-red-600 p-4 rounded-r-xl shadow-sm flex justify-between items-center animate-pulse">
+                            <div>
+                                <p class="font-bold text-red-800 text-sm md:text-base"><i class="fa-solid fa-triangle-exclamation mr-2"></i>OVERDUE: ${part}</p>
+                                <p class="text-xs text-red-600 mt-0.5 font-medium">Exceeded the ${nextDueOdo} km limit!</p>
+                            </div>
+                            <button onclick="switchTab('pms', document.querySelectorAll('.nav-btn')[2])" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-red-700 shadow-sm transition">View</button>
+                        </div>
+                    `;
+                } else if (remaining <= 500 && lastOdo !== 0) {
+                    // Alert if DUE SOON
+                    alertsContainer.innerHTML += `
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-xl shadow-sm flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-yellow-800 text-sm md:text-base"><i class="fa-solid fa-circle-exclamation mr-2"></i>Due Soon: ${part}</p>
+                                <p class="text-xs text-yellow-700 mt-0.5 font-medium">Replace in ${remaining} km (Due at ${nextDueOdo} km)</p>
+                            </div>
+                            <button onclick="switchTab('pms', document.querySelectorAll('.nav-btn')[2])" class="bg-yellow-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold hover:bg-yellow-600 shadow-sm transition">View</button>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function renderPMSStatus() {
+            const statusContainer = document.getElementById('pms-status-grid');
+            if (!statusContainer) return;
+            statusContainer.innerHTML = '';
+
+            let currentOdo = parseInt(appData.currentOdo) || 0;
+
+            Object.keys(appData.pmsIntervals).forEach(part => {
+                let interval = appData.pmsIntervals[part];
+                // Find latest record that contains this part
+                let latestRecord = appData.pms.find(r => r.parts && r.parts.includes(part));
+                let lastOdo = latestRecord ? parseInt(latestRecord.odo) : 0;
+                
+                let nextDueOdo = lastOdo + interval;
+                if (lastOdo === 0) nextDueOdo = interval; // Assume due at first interval if no record
+                
+                let remaining = nextDueOdo - currentOdo;
+                
+                let statusColor = "text-green-700 bg-green-100";
+                let statusText = "Good";
+                let icon = "fa-check-circle";
+                let remainingDisplay = `Remaining: ${remaining} km`;
+                
+                if (remaining <= 0 && lastOdo !== 0) {
+                    statusColor = "text-white bg-red-600 animate-pulse";
+                    statusText = "OVERDUE";
+                    icon = "fa-triangle-exclamation";
+                    remainingDisplay = `Overdue by: ${Math.abs(remaining)} km`;
+                } else if (remaining <= 500 && lastOdo !== 0) {
+                    statusColor = "text-yellow-800 bg-yellow-200";
+                    statusText = "Due Soon";
+                    icon = "fa-circle-exclamation";
+                } else if (lastOdo === 0) {
+                    statusColor = "text-gray-600 bg-gray-200";
+                    statusText = "No Record";
+                    icon = "fa-minus-circle";
+                    remainingDisplay = remaining > 0 ? `Remaining: ${remaining} km` : `Overdue by: ${Math.abs(remaining)} km`;
+                }
+
+                statusContainer.innerHTML += `
+                    <div class="bg-white border rounded-lg p-3 flex justify-between items-center shadow-sm">
+                        <div>
+                            <div class="font-bold text-gray-800 text-sm">${part}</div>
+                            <div class="text-xs font-bold ${remaining <= 0 ? 'text-red-600' : 'text-blue-600'}">${remainingDisplay}</div>
+                            <div class="text-[10px] text-gray-400 mt-0.5">Target Odo: ${nextDueOdo} km</div>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-[10px] md:text-xs font-bold px-2 py-1 rounded shadow-sm flex items-center ${statusColor}">
+                                <i class="fa-solid ${icon} mr-1"></i> ${statusText}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderPayments() {
+            document.getElementById('pay-monthly').innerText = formatMoney(appData.loanInfo.monthly);
+            document.getElementById('pay-terms').innerText = appData.loanInfo.terms;
+            document.getElementById('pay-due').innerText = `Day ${appData.loanInfo.dueDate}`;
+
+            const listContainer = document.getElementById('payment-list');
+            listContainer.innerHTML = '';
+
+            if (appData.payments.length === 0) {
+                listContainer.innerHTML = '<div class="text-center bg-white border border-dashed border-gray-300 rounded-xl text-gray-500 py-8 text-sm">No payments recorded yet.</div>';
+                return;
+            }
+
+            appData.payments.forEach((payment, index) => {
+                const pNum = appData.payments.length - index; 
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 md:p-5 rounded-xl shadow-sm border border-gray-100 border-l-4 border-l-green-500 flex justify-between items-center hover:shadow-md transition";
+                div.innerHTML = `
+                    <div>
+                        <div class="font-bold text-lg text-gray-800 mb-1">${formatMoney(payment.amount)}</div>
+                        <div class="text-xs text-gray-500 font-medium"><i class="fa-regular fa-calendar mr-1"></i> ${payment.date} &nbsp; | &nbsp; Ref: ${payment.ref || 'N/A'}</div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full mr-3 hidden md:inline-block">Payment #${pNum}</span>
+                        <span class="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded-full mr-2 md:hidden">#${pNum}</span>
+                        <button onclick="deleteRecord('payment', '${payment.id}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded transition">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        function renderPMS() {
+            const listContainer = document.getElementById('pms-list');
+            listContainer.innerHTML = '';
+
+            if (appData.pms.length === 0) {
+                listContainer.innerHTML = '<div class="text-center bg-white border border-dashed border-gray-300 rounded-xl text-gray-500 py-8 text-sm">No maintenance recorded yet.</div>';
+                return;
+            }
+
+            appData.pms.forEach(record => {
+                let partsBadges = (record.parts && record.parts.length > 0) 
+                    ? record.parts.map(p => `<span class="text-[10px] bg-blue-50 border border-blue-200 text-blue-800 px-2 py-0.5 rounded-full font-semibold">${p}</span>`).join('') 
+                    : '';
+
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 md:p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col relative hover:shadow-md transition";
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-3 border-b border-gray-100 pb-3">
+                        <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+                            <span class="font-bold text-gray-800 text-base"><i class="fa-regular fa-calendar mr-1 text-gray-400"></i> ${record.date}</span>
+                            <span class="text-xs text-blue-700 bg-blue-100 px-2 py-1 rounded font-bold w-max">Odo: ${record.odo} km</span>
+                        </div>
+                        <button onclick="deleteRecord('pms', '${record.id}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded transition">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    ${partsBadges ? `<div class="flex flex-wrap gap-1 mb-2">${partsBadges}</div>` : ''}
+                    <div class="text-sm text-gray-700 mb-3 md:text-base font-medium">
+                        ${record.service}
+                    </div>
+                    <div class="text-sm text-gray-500 text-right bg-gray-50 p-2 rounded-lg self-end w-full md:w-auto mt-auto">
+                        Cost: <span class="font-bold text-gray-800 ml-1">${formatMoney(record.cost)}</span>
+                    </div>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            updateUI();
+        };
+
+    </script>
+</body>
+</html>
