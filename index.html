@@ -8,7 +8,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MotoTracker">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'><path fill='%232563eb' d='M280 32C280 14.3 294.3 0 312 0l72 0c53 0 96 43 96 96c0 47.2-34.1 86.6-79.1 94.6l-21.7 54.2c27.1 23.3 46 56.4 50.9 94.1c42.8-5.5 83.1-23.7 114.9-52.6L600 256l0-16c0-17.7 14.3-32 32-32s32 14.3 32 32l0 16c0 8.8-7.2 16-16 16l-16 0-38.6 38.6c18 25.1 28.6 55.6 28.6 88.4c0 83.9-68.1 152-152 152s-152-68.1-152-152c0-29.5 8.5-57 23.1-79.7l-35.8-89.4C292 233.1 280 249.2 280 267.6l0 20.4c0 17.7-14.3 32-32 32l-24 0c-17.7 0-32-14.3-32-32l0-42.5c0-38.3 23-72.6 57.8-86.5l14.9-5.9c15.2-6.1 22.6-23.3 16.5-38.5s-23.3-22.6-38.5-16.5L200.5 141.2C170.6 153.1 150 182.5 150 215.4l0 9.2c-5.8 2.1-11.3 4.6-16.5 7.6L125 212.8c-7-10.5-20.9-14-32.3-8.2L12.5 244.8C5 248.5 0 256.1 0 264.6c0 13 10.5 23.4 23.4 23.4l11.4 0L17.5 311.1c-11.1 19.3-17.5 41.7-17.5 65.5C0 460.5 68.1 528.6 152 528.6s152-68.1 152-152c0-23.8-6.4-46.2-17.5-65.5l30.4-53.1 13.9-34.8c11.3-11.3 23.8-21.2 37.3-29.6l23.5-58.8c3.2-8.1 6.8-15.9 10.7-23.4l-11.2-4.5c-4.4-1.8-9.4 .4-11.2 4.8l-15.5 38.7c-2 5-7.7 7.4-12.7 5.4s-7.4-7.7-5.4-12.7L280 32zM152 464.6c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88zm352 0c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88z'/></svg>">
+    
+    <!-- Standalone Web App Manifest -->
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22MotoTracker%22%2C%22short_name%22%3A%22MotoTracker%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f3f4f6%22%2C%22theme_color%22%3A%22%232563eb%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%253E%253Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27120%27%20fill%3D%27%25232563eb%27%2F%253E%253Cpath%20fill%3D%27%2523ffffff%27%20transform%3D%27translate%2864%2C%20128%29%20scale%280.6%29%27%20d%3D%27M280%2032C280%2014.3%20294.3%200%20312%200l72%200c53%200%2096%2043%2096%2096c0%2047.2-34.1%2086.6-79.1%2094.6l-21.7%2054.2c27.1%2023.3%2046%2056.4%2050.9%2094.1c42.8-5.5%2083.1-23.7%20114.9-52.6L600%20256l0-16c0-17.7%2014.3-32%2032-32s32%2014.3%2032%2032l0%2016c0%208.8-7.2%2016-16%2016l-16%200-38.6%2038.6c18%2025.1%2028.6%2055.6%2028.6%2088.4c0%2083.9-68.1%20152-152%20152s-152-68.1-152-152c0-29.5%208.5-57%2023.1-79.7l-35.8-89.4C292%20233.1%20280%20249.2%20280%20267.6l0%2020.4c0%2017.7-14.3%2032-32%2032l-24%200c-17.7%200-32-14.3-32-32l0-42.5c0-38.3%2023-72.6%2057.8-86.5l14.9-5.9c15.2-6.1%2022.6-23.3%2016.5-38.5s-23.3-22.6-38.5-16.5L200.5%20141.2C170.6%20153.1%20150%20182.5%20150%20215.4l0%209.2c-5.8%202.1-11.3%204.6-16.5%207.6L125%20212.8c-7-10.5-20.9-14-32.3-8.2L12.5%20244.8C5%20248.5%200%20256.1%200%20264.6c0%2013%2010.5%2023.4%2023.4%2023.4l11.4%200L17.5%20311.1c-11.1%2019.3-17.5%2041.7-17.5%2065.5C0%20460.5%2068.1%20528.6%20152%20528.6s152-68.1%20152-152c0-23.8-6.4-46.2-17.5-65.5l30.4-53.1%2013.9-34.8c11.3-11.3%2023.8-21.2%2037.3-29.6l23.5-58.8c3.2-8.1%206.8-15.9%2010.7-23.4l-11.2-4.5c-4.4-1.8-9.4%20.4-11.2%204.8l-15.5%2038.7c-2%205-7.7%207.4-12.7%205.4s-7.4-7.7-5.4-12.7L280%2032zM152%20464.6c48.6%200%2088-39.4%2088-88s-39.4-88-88-88s-88%2039.4-88%2088s39.4%2088%2088%2088zm352%200c48.6%200%2088-39.4%2088-88s-39.4-88-88-88s-88%2039.4-88%2088s39.4%2088%2088%2088z%27%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%232563eb'/%3E%3Cpath fill='%23ffffff' transform='translate(64, 128) scale(0.6)' d='M280 32C280 14.3 294.3 0 312 0l72 0c53 0 96 43 96 96c0 47.2-34.1 86.6-79.1 94.6l-21.7 54.2c27.1 23.3 46 56.4 50.9 94.1c42.8-5.5 83.1-23.7 114.9-52.6L600 256l0-16c0-17.7 14.3-32 32-32s32 14.3 32 32l0 16c0 8.8-7.2 16-16 16l-16 0-38.6 38.6c18 25.1 28.6 55.6 28.6 88.4c0 83.9-68.1 152-152 152s-152-68.1-152-152c0-29.5 8.5-57 23.1-79.7l-35.8-89.4C292 233.1 280 249.2 280 267.6l0 20.4c0 17.7-14.3 32-32 32l-24 0c-17.7 0-32-14.3-32-32l0-42.5c0-38.3 23-72.6 57.8-86.5l14.9-5.9c15.2-6.1 22.6-23.3 16.5-38.5s-23.3-22.6-38.5-16.5L200.5 141.2C170.6 153.1 150 182.5 150 215.4l0 9.2c-5.8 2.1-11.3 4.6-16.5 7.6L125 212.8c-7-10.5-20.9-14-32.3-8.2L12.5 244.8C5 248.5 0 256.1 0 264.6c0 13 10.5 23.4 23.4 23.4l11.4 0L17.5 311.1c-11.1 19.3-17.5 41.7-17.5 65.5C0 460.5 68.1 528.6 152 528.6s152-68.1 152-152c0-23.8-6.4-46.2-17.5-65.5l30.4-53.1 13.9-34.8c11.3-11.3 23.8-21.2 37.3-29.6l23.5-58.8c3.2-8.1 6.8-15.9 10.7-23.4l-11.2-4.5c-4.4-1.8-9.4 .4-11.2 4.8l-15.5 38.7c-2 5-7.7 7.4-12.7 5.4s-7.4-7.7-5.4-12.7L280 32zM152 464.6c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88zm352 0c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88z'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%232563eb'/%3E%3Cpath fill='%23ffffff' transform='translate(64, 128) scale(0.6)' d='M280 32C280 14.3 294.3 0 312 0l72 0c53 0 96 43 96 96c0 47.2-34.1 86.6-79.1 94.6l-21.7 54.2c27.1 23.3 46 56.4 50.9 94.1c42.8-5.5 83.1-23.7 114.9-52.6L600 256l0-16c0-17.7 14.3-32 32-32s32 14.3 32 32l0 16c0 8.8-7.2 16-16 16l-16 0-38.6 38.6c18 25.1 28.6 55.6 28.6 88.4c0 83.9-68.1 152-152 152s-152-68.1-152-152c0-29.5 8.5-57 23.1-79.7l-35.8-89.4C292 233.1 280 249.2 280 267.6l0 20.4c0 17.7-14.3 32-32 32l-24 0c-17.7 0-32-14.3-32-32l0-42.5c0-38.3 23-72.6 57.8-86.5l14.9-5.9c15.2-6.1 22.6-23.3 16.5-38.5s-23.3-22.6-38.5-16.5L200.5 141.2C170.6 153.1 150 182.5 150 215.4l0 9.2c-5.8 2.1-11.3 4.6-16.5 7.6L125 212.8c-7-10.5-20.9-14-32.3-8.2L12.5 244.8C5 248.5 0 256.1 0 264.6c0 13 10.5 23.4 23.4 23.4l11.4 0L17.5 311.1c-11.1 19.3-17.5 41.7-17.5 65.5C0 460.5 68.1 528.6 152 528.6s152-68.1 152-152c0-23.8-6.4-46.2-17.5-65.5l30.4-53.1 13.9-34.8c11.3-11.3 23.8-21.2 37.3-29.6l23.5-58.8c3.2-8.1 6.8-15.9 10.7-23.4l-11.2-4.5c-4.4-1.8-9.4 .4-11.2 4.8l-15.5 38.7c-2 5-7.7 7.4-12.7 5.4s-7.4-7.7-5.4-12.7L280 32zM152 464.6c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88zm352 0c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88z'/%3E%3C/svg%3E">
     <title>MotoTracker - Motorcycle & Payment Monitor</title>
     <!-- Use Tailwind CSS for fast and responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,7 +46,7 @@
         <nav class="bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] md:shadow-none md:border-r border-gray-200 flex md:flex-col justify-around md:justify-start p-2 md:p-4 md:pt-8 absolute md:relative bottom-0 w-full md:w-64 z-20 md:h-full order-last md:order-first transition-all">
             <!-- Desktop Logo/Header -->
             <div class="hidden md:flex items-center gap-3 mb-8 text-blue-600 px-4">
-                <i class="fa-solid fa-motorcycle text-3xl"></i>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%232563eb'/%3E%3Cpath fill='%23ffffff' transform='translate(64, 128) scale(0.6)' d='M280 32C280 14.3 294.3 0 312 0l72 0c53 0 96 43 96 96c0 47.2-34.1 86.6-79.1 94.6l-21.7 54.2c27.1 23.3 46 56.4 50.9 94.1c42.8-5.5 83.1-23.7 114.9-52.6L600 256l0-16c0-17.7 14.3-32 32-32s32 14.3 32 32l0 16c0 8.8-7.2 16-16 16l-16 0-38.6 38.6c18 25.1 28.6 55.6 28.6 88.4c0 83.9-68.1 152-152 152s-152-68.1-152-152c0-29.5 8.5-57 23.1-79.7l-35.8-89.4C292 233.1 280 249.2 280 267.6l0 20.4c0 17.7-14.3 32-32 32l-24 0c-17.7 0-32-14.3-32-32l0-42.5c0-38.3 23-72.6 57.8-86.5l14.9-5.9c15.2-6.1 22.6-23.3 16.5-38.5s-23.3-22.6-38.5-16.5L200.5 141.2C170.6 153.1 150 182.5 150 215.4l0 9.2c-5.8 2.1-11.3 4.6-16.5 7.6L125 212.8c-7-10.5-20.9-14-32.3-8.2L12.5 244.8C5 248.5 0 256.1 0 264.6c0 13 10.5 23.4 23.4 23.4l11.4 0L17.5 311.1c-11.1 19.3-17.5 41.7-17.5 65.5C0 460.5 68.1 528.6 152 528.6s152-68.1 152-152c0-23.8-6.4-46.2-17.5-65.5l30.4-53.1 13.9-34.8c11.3-11.3 23.8-21.2 37.3-29.6l23.5-58.8c3.2-8.1 6.8-15.9 10.7-23.4l-11.2-4.5c-4.4-1.8-9.4 .4-11.2 4.8l-15.5 38.7c-2 5-7.7 7.4-12.7 5.4s-7.4-7.7-5.4-12.7L280 32zM152 464.6c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88zm352 0c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88z'/%3E%3C/svg%3E" alt="App Icon" class="w-8 h-8 rounded-lg shadow-sm">
                 <span class="text-xl font-bold tracking-wide">MotoTracker</span>
             </div>
 
@@ -69,7 +74,7 @@
             <!-- Mobile Header -->
             <header class="md:hidden bg-blue-600 text-white p-4 shadow-md z-10 flex justify-between items-center">
                 <h1 class="text-xl font-bold tracking-wide" id="header-title-mobile">Dashboard</h1>
-                <i class="fa-solid fa-motorcycle text-2xl"></i>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%232563eb'/%3E%3Cpath fill='%23ffffff' transform='translate(64, 128) scale(0.6)' d='M280 32C280 14.3 294.3 0 312 0l72 0c53 0 96 43 96 96c0 47.2-34.1 86.6-79.1 94.6l-21.7 54.2c27.1 23.3 46 56.4 50.9 94.1c42.8-5.5 83.1-23.7 114.9-52.6L600 256l0-16c0-17.7 14.3-32 32-32s32 14.3 32 32l0 16c0 8.8-7.2 16-16 16l-16 0-38.6 38.6c18 25.1 28.6 55.6 28.6 88.4c0 83.9-68.1 152-152 152s-152-68.1-152-152c0-29.5 8.5-57 23.1-79.7l-35.8-89.4C292 233.1 280 249.2 280 267.6l0 20.4c0 17.7-14.3 32-32 32l-24 0c-17.7 0-32-14.3-32-32l0-42.5c0-38.3 23-72.6 57.8-86.5l14.9-5.9c15.2-6.1 22.6-23.3 16.5-38.5s-23.3-22.6-38.5-16.5L200.5 141.2C170.6 153.1 150 182.5 150 215.4l0 9.2c-5.8 2.1-11.3 4.6-16.5 7.6L125 212.8c-7-10.5-20.9-14-32.3-8.2L12.5 244.8C5 248.5 0 256.1 0 264.6c0 13 10.5 23.4 23.4 23.4l11.4 0L17.5 311.1c-11.1 19.3-17.5 41.7-17.5 65.5C0 460.5 68.1 528.6 152 528.6s152-68.1 152-152c0-23.8-6.4-46.2-17.5-65.5l30.4-53.1 13.9-34.8c11.3-11.3 23.8-21.2 37.3-29.6l23.5-58.8c3.2-8.1 6.8-15.9 10.7-23.4l-11.2-4.5c-4.4-1.8-9.4 .4-11.2 4.8l-15.5 38.7c-2 5-7.7 7.4-12.7 5.4s-7.4-7.7-5.4-12.7L280 32zM152 464.6c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88zm352 0c48.6 0 88-39.4 88-88s-39.4-88-88-88s-88 39.4-88 88s39.4 88 88 88z'/%3E%3C/svg%3E" alt="App Icon" class="w-7 h-7 rounded shadow-sm border border-white">
             </header>
 
             <!-- Desktop Header -->
@@ -302,7 +307,7 @@
 
                     <!-- PMS Checkboxes -->
                     <div class="bg-gray-50 p-3 rounded border">
-                        <label class="block text-xs font-bold text-gray-600 mb-2 uppercase tracking-wide">Parts Replaced / Serviced</label>
+                        <label class="block text-xs font-bold text-gray-600 mb-2 uppercase tracking-wide">Parts Replaced / Serviced <span class="text-[10px] text-blue-500 lowercase normal-case ml-1">(*Check to reset interval)</span></label>
                         <div class="grid grid-cols-2 gap-2">
                             <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="Engine Oil" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> Engine Oil</label>
                             <label class="flex items-center text-sm cursor-pointer"><input type="checkbox" value="Gear Oil" class="pms-checkbox mr-2 accent-blue-600 w-4 h-4"> Gear Oil</label>
@@ -604,7 +609,14 @@
             }
 
             appData.payments.push({ id: Date.now(), date: date, amount: amount, ref: ref });
-            appData.payments.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Fixed Sorting: Pag parehas ang date, yung pinakabagong ID (latest added) ang mauuna
+            appData.payments.sort((a, b) => {
+                const dateDiff = new Date(b.date) - new Date(a.date);
+                if (dateDiff !== 0) return dateDiff;
+                return b.id - a.id;
+            });
+            
             saveData();
             closeModal('modal-add-payment');
             
@@ -617,7 +629,8 @@
 
         function addPMSRecord() {
             const date = document.getElementById('pms-date').value;
-            const odo = parseInt(document.getElementById('pms-odo').value) || 0;
+            const odoInput = document.getElementById('pms-odo').value;
+            const odo = parseInt(odoInput);
             const service = document.getElementById('pms-service').value;
             const cost = parseFloat(document.getElementById('pms-cost').value) || 0;
             
@@ -627,8 +640,9 @@
                 partsReplaced.push(cb.value);
             });
 
-            if(!date || (partsReplaced.length === 0 && !service)) {
-                showToast("Error: Please enter a date and select at least one part or service.");
+            // Validation: Kailangan may date, valid na Odometer number, at may napiling part o service
+            if(!date || isNaN(odo) || (partsReplaced.length === 0 && !service)) {
+                showToast("Error: Please enter a date, valid odometer, and select at least one part or service.");
                 return;
             }
 
@@ -641,12 +655,18 @@
                 cost: cost
             });
 
-            // Auto-update global odo if the PMS odo is higher
-            if(odo > appData.currentOdo) {
+            // Auto-update global odo if the PMS odo is higher or equal
+            if(odo >= appData.currentOdo) {
                 appData.currentOdo = odo;
             }
 
-            appData.pms.sort((a, b) => new Date(b.date) - new Date(a.date));
+            // Fixed Sorting: Pag parehas ang date, yung pinakabagong ID (latest added) ang mauuna
+            appData.pms.sort((a, b) => {
+                const dateDiff = new Date(b.date) - new Date(a.date);
+                if (dateDiff !== 0) return dateDiff;
+                return b.id - a.id;
+            });
+
             saveData();
             closeModal('modal-pms');
 
@@ -867,6 +887,7 @@
                     <div class="bg-white border rounded-lg p-3 flex justify-between items-center shadow-sm">
                         <div>
                             <div class="font-bold text-gray-800 text-sm">${part}</div>
+                            <div class="text-[10px] text-gray-500 mb-0.5">Last replaced: ${lastOdo === 0 ? 'No record' : lastOdo + ' km'}</div>
                             <div class="text-xs font-bold ${remaining <= 0 ? 'text-red-600' : 'text-blue-600'}">${remainingDisplay}</div>
                             <div class="text-[10px] text-gray-400 mt-0.5">Target Odo: ${nextDueOdo} km</div>
                         </div>
