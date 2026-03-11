@@ -293,7 +293,7 @@
         <div id="modal-pms" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto pt-20 pb-20">
             <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all my-auto">
                 <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
-                    <h3 class="font-bold text-lg">Add Maintenance Record</h3>
+                    <h3 class="font-bold text-lg" id="modal-pms-title">Add Maintenance Record</h3>
                     <button onclick="closeModal('modal-pms')" class="hover:text-gray-200 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
@@ -366,7 +366,7 @@
         <div id="modal-add-payment" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
             <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
                 <div class="bg-green-600 p-4 text-white flex justify-between items-center">
-                    <h3 class="font-bold text-lg">Record Payment</h3>
+                    <h3 class="font-bold text-lg" id="modal-payment-title">Record Payment</h3>
                     <button onclick="closeModal('modal-add-payment')" class="hover:text-green-200 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
@@ -562,19 +562,29 @@
         }
 
         // --- MODAL LOGIC ---
+        let editingPaymentId = null;
+        let editingPmsId = null;
+
         function openModal(modalId) {
             document.getElementById(modalId).classList.remove('hidden');
             
             const today = new Date().toISOString().split('T')[0];
             if(modalId === 'modal-pms') {
+                editingPmsId = null;
+                document.getElementById('modal-pms-title').innerText = "Add Maintenance Record";
                 document.getElementById('pms-date').value = today;
                 document.getElementById('pms-odo').value = appData.currentOdo || '';
+                document.getElementById('pms-service').value = '';
+                document.getElementById('pms-cost').value = '';
                 // Uncheck all boxes
                 document.querySelectorAll('.pms-checkbox').forEach(cb => cb.checked = false);
             }
             if(modalId === 'modal-add-payment') {
+                editingPaymentId = null;
+                document.getElementById('modal-payment-title').innerText = "Record Payment";
                 document.getElementById('pay-add-date').value = today;
                 document.getElementById('pay-add-amount').value = appData.loanInfo.monthly || '';
+                document.getElementById('pay-add-ref').value = '';
             }
             if(modalId === 'modal-loan-settings') {
                 document.getElementById('set-monthly').value = appData.loanInfo.monthly || '';
@@ -667,6 +677,19 @@
             updateUI();
         }
 
+        function editPayment(id) {
+            editingPaymentId = id;
+            const payment = appData.payments.find(p => p.id == id);
+            if (!payment) return;
+
+            document.getElementById('modal-payment-title').innerText = "Edit Payment";
+            document.getElementById('pay-add-date').value = payment.date;
+            document.getElementById('pay-add-amount').value = payment.amount;
+            document.getElementById('pay-add-ref').value = payment.ref || '';
+
+            document.getElementById('modal-add-payment').classList.remove('hidden');
+        }
+
         function addPaymentRecord() {
             const date = document.getElementById('pay-add-date').value;
             const amount = parseFloat(document.getElementById('pay-add-amount').value) || 0;
@@ -677,7 +700,21 @@
                 return;
             }
 
-            appData.payments.push({ id: Date.now(), date: date, amount: amount, ref: ref });
+            if (editingPaymentId) {
+                // Update existing record
+                const index = appData.payments.findIndex(p => p.id == editingPaymentId);
+                if (index !== -1) {
+                    appData.payments[index].date = date;
+                    appData.payments[index].amount = amount;
+                    appData.payments[index].ref = ref;
+                }
+                editingPaymentId = null;
+                showToast("Payment Updated!");
+            } else {
+                // Add new record
+                appData.payments.push({ id: Date.now(), date: date, amount: amount, ref: ref });
+                showToast("Payment Recorded!");
+            }
             
             // Fixed Sorting: Pag parehas ang date, yung pinakabagong ID (latest added) ang mauuna
             appData.payments.sort((a, b) => {
@@ -692,8 +729,26 @@
             document.getElementById('pay-add-amount').value = '';
             document.getElementById('pay-add-ref').value = '';
             
-            showToast("Payment Recorded!");
             updateUI();
+        }
+
+        function editPms(id) {
+            editingPmsId = id;
+            const record = appData.pms.find(p => p.id == id);
+            if (!record) return;
+
+            document.getElementById('modal-pms-title').innerText = "Edit Maintenance Record";
+            document.getElementById('pms-date').value = record.date;
+            document.getElementById('pms-odo').value = record.odo;
+            document.getElementById('pms-service').value = record.service || '';
+            document.getElementById('pms-cost').value = record.cost || '';
+
+            // Check the boxes that were previously selected
+            document.querySelectorAll('.pms-checkbox').forEach(cb => {
+                cb.checked = record.parts && record.parts.includes(cb.value);
+            });
+
+            document.getElementById('modal-pms').classList.remove('hidden');
         }
 
         function addPMSRecord() {
@@ -715,14 +770,30 @@
                 return;
             }
 
-            appData.pms.push({
-                id: Date.now(),
-                date: date,
-                odo: odo,
-                parts: partsReplaced,
-                service: service || (partsReplaced.length > 0 ? "Standard Replacements" : ""),
-                cost: cost
-            });
+            if (editingPmsId) {
+                // Update existing record
+                const index = appData.pms.findIndex(p => p.id == editingPmsId);
+                if (index !== -1) {
+                    appData.pms[index].date = date;
+                    appData.pms[index].odo = odo;
+                    appData.pms[index].parts = partsReplaced;
+                    appData.pms[index].service = service || (partsReplaced.length > 0 ? "Standard Replacements" : "");
+                    appData.pms[index].cost = cost;
+                }
+                editingPmsId = null;
+                showToast("PMS Record Updated!");
+            } else {
+                // Add new record
+                appData.pms.push({
+                    id: Date.now(),
+                    date: date,
+                    odo: odo,
+                    parts: partsReplaced,
+                    service: service || (partsReplaced.length > 0 ? "Standard Replacements" : ""),
+                    cost: cost
+                });
+                showToast("PMS Record Added!");
+            }
 
             // Auto-update global odo if the PMS odo is higher or equal
             if(odo >= appData.currentOdo) {
@@ -743,7 +814,6 @@
             document.getElementById('pms-service').value = '';
             document.getElementById('pms-cost').value = '';
 
-            showToast("PMS Record Added!");
             updateUI();
         }
 
@@ -1005,6 +1075,9 @@
                     <div class="flex items-center">
                         <span class="text-xs font-bold bg-green-100 text-green-700 px-3 py-1 rounded-full mr-3 hidden md:inline-block">Payment #${pNum}</span>
                         <span class="text-xs font-bold bg-green-100 text-green-700 px-2 py-1 rounded-full mr-2 md:hidden">#${pNum}</span>
+                        <button onclick="editPayment(${payment.id})" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 p-2 rounded transition mr-2">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
                         <button onclick="deleteRecord('payment', '${payment.id}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded transition">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -1036,9 +1109,14 @@
                             <span class="font-bold text-gray-800 text-base"><i class="fa-regular fa-calendar mr-1 text-gray-400"></i> ${record.date}</span>
                             <span class="text-xs text-blue-700 bg-blue-100 px-2 py-1 rounded font-bold w-max">Odo: ${record.odo} km</span>
                         </div>
-                        <button onclick="deleteRecord('pms', '${record.id}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded transition">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <div class="flex items-center">
+                            <button onclick="editPms(${record.id})" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 p-2 rounded transition mr-2">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteRecord('pms', '${record.id}')" class="text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 p-2 rounded transition">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                     ${partsBadges ? `<div class="flex flex-wrap gap-1 mb-2">${partsBadges}</div>` : ''}
                     <div class="text-sm text-gray-700 mb-3 md:text-base font-medium">
